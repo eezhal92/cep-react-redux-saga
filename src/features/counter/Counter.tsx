@@ -3,23 +3,29 @@ import React, { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   decrement,
-  increment,
   incrementByAmount,
   incrementAsync,
   incrementIfOdd,
   selectCount,
 } from './counterSlice';
 import styles from './Counter.module.css';
+import { mockActionCreators } from '../news/actions';
+import { selectNews, setNews } from '../news/newsSlice';
 
 export function Counter() {
   const count = useAppSelector(selectCount);
   const dispatch = useAppDispatch();
   const [incrementAmount, setIncrementAmount] = useState('2');
 
+  const news = useAppSelector(selectNews);
   const incrementValue = Number(incrementAmount) || 0;
+
 
   return (
     <div>
+      {news.map(item => (
+        <div key={item.id}>{item.title}</div>
+      ))}
       <div className={styles.row}>
         <button
           className={styles.button}
@@ -32,9 +38,11 @@ export function Counter() {
         <button
           className={styles.button}
           aria-label="Increment value"
-          onClick={() => dispatch(increment())}
+          onClick={() => {
+            dispatch(mockActionCreators.fetchNewsRequest());
+          }}
         >
-          +
+          Tolong fetch news
         </button>
       </div>
       <div className={styles.row}>
